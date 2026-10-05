@@ -8,6 +8,8 @@ Go to [supabase.com](https://supabase.com), create a free project. Note your
 project's **Project Reference ID** (Project Settings → General) and your
 **API URL** / **anon public key** (Project Settings → API).
 
+SummitGearCompany
+
 ## 2. Install the Supabase CLI
 Already listed as available in this environment. If you need it elsewhere:
 ```
