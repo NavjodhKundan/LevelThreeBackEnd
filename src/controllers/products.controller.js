@@ -4,18 +4,29 @@ import { supabase } from "../config/supabaseClient";
 
 //function to get all products from database
 export const getProducts = async (request, response) => {
-    const {data, error} = await supabase.from('products').select();
-    return response.send(data);
+    try {
+        const {data, error} = await supabase.from('products').select();
+        if(error){
+            return next(error);
+        }
+        return response.send(data);
+    } catch (error){
+        next(error)
+    }
 }
 
 //function to get a product by id
-export const getProductById = async (request, response) => {
-    const {id} = request.params;
-    const {data, error} = await supabase.from('products').select().eq('id',id);
-    if(data === null || data.length === 0){
-        return response.status(400).send({msg: "404 not found"});
+export const getProductById = async (request, response, next) => {
+    try{
+        const {id} = request.params;
+        const {data, error} = await supabase.from('products').select().eq('id',id);
+        if(data === null || data.length === 0 || error){
+            return next(error);
+        }
+        return response.send(data);
+    } catch (error){
+        next(error);
     }
-    return response.send(data);
 }
 
 //inserting a data into database

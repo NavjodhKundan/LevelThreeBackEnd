@@ -1,6 +1,7 @@
 import express from "express";
 import router from "./routes/products.routes.js";
 import logger from "./middleware/logger.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 
 const app = express();
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 3001;
 //middleware
 app.use(express.json());
 app.use(logger);
+app.use(errorHandler);
 
 //routes
 app.use("/", router);
