@@ -1,11 +1,14 @@
 import express from "express";
 import router from "./routes/products.routes.js";
+import logger from "./middleware/logger.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 //middleware
 app.use(express.json());
+app.use(logger);
 
 //routes
 app.use("/", router);

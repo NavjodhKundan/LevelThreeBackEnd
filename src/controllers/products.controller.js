@@ -1,6 +1,4 @@
-import { request, response } from "express";
 import { supabase } from "../config/supabaseClient";
-
 //Day 2
 //2.2
 
