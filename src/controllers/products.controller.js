@@ -1,4 +1,8 @@
 import { supabase } from "../config/supabaseClient";
+import {string, z} from "zod";
+
+const idSchema = z.number().positive();
+
 //Day 2
 //2.2
 
@@ -19,12 +23,16 @@ export const getProducts = async (request, response) => {
 export const getProductById = async (request, response, next) => {
     try{
         const {id} = request.params;
+        idSchema.parse(id);
         const {data, error} = await supabase.from('products').select().eq('id',id);
         if(data === null || data.length === 0 || error){
             return next(error);
         }
         return response.send(data);
     } catch (error){
+        if(error instanceof z.ZodError){
+            error.issues;
+        }
         next(error);
     }
 }
@@ -37,6 +45,10 @@ const product = {
     description: "confertable water proof shoes, best for hiking!",
 }
 export const addNewProduct = async (request, response) => {
+    const result = productSchema.safeParse(product);
+    if(!result.success){
+        return result.error;
+    }
     const {data, error} = await supabase.from('products').insert({
         name: product.name, 
         price: product.price, 

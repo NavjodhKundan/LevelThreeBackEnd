@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { getProducts, getProductById, addNewProduct, updateProductById, deleteProductById } from "../controllers/products.controller";
+import { validate } from "../middleware/dataValidation";
+import { productSchema } from "../schemas/prductSchema";
 
 const router = Router();
 
@@ -13,10 +15,10 @@ router.get("/products", getProducts);
 router.get("/products/:id", getProductById);
 
 //inserting a new data/row into database
-router.post("/addProduct", addNewProduct);
+router.post("/addProduct", validate(productSchema), addNewProduct);
 
 //updating a specific row/product and returing the updated product or else returning 404.
-router.put("/products/:id", updateProductById);
+router.put("/products/:id", validate(productSchema),updateProductById);
 
 //deleting a row and returning a success message or 404 if not found
 router.delete("/products/:id", deleteProductById);

@@ -1,0 +1,8 @@
+import {z} from "zod";
+
+export const productSchema = z.object({
+    name: z.string("Not a sting").min(1, "Name is required"),
+    price: z.number("Must be a number").positive("cannot be negative number"),
+    stock: z.number("Should be a number").positive("cannot be a negative number"),
+    description: z.string("should be string")
+})
