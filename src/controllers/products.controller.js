@@ -13,7 +13,7 @@ export const getProducts = async (request, response) => {
         if(error){
             return next(error);
         }
-        return response.send(data);
+        return response.status(201).send(data);
     } catch (error){
         next(error)
     }
@@ -28,7 +28,7 @@ export const getProductById = async (request, response, next) => {
         if(data === null || data.length === 0 || error){
             return next(error);
         }
-        return response.send(data);
+        return response.status(201).send(data);
     } catch (error){
         if(error instanceof z.ZodError){
             error.issues;
@@ -59,7 +59,7 @@ export const addNewProduct = async (request, response) => {
     if(error){
         return response.status(500).send({msg: error});
     }
-    return response.send(data);
+    return response.status(200).send(data);
 }
 
 //updating a specific row/product using product id
@@ -72,10 +72,10 @@ export const updateProductById = async(request, response) => {
     if(error){
         return response.status(500).send(error);
     }else if(data === null || data.length === 0){
-        return response.status(400).send({msg: "404 no product found..."});
+        return response.status(404).send({msg: "no product found..."});
     }
 
-    return response.send(data);
+    return response.status(200).send(data);
 }
 
 //deleting a row using product id
@@ -85,10 +85,10 @@ export const deleteProductById = async (request, response) => {
     const {data, error} = await supabase.from("products").delete().eq("id", id).select();
 
     if(error){
-        return response.send("404 no such product found");
+        return response.status(404).send("no such product found");
     }
     if(data === null || data.length === 0){
-        return response.status(500).send({msg: "404 no such product found"});
+        return response.status(404).send({msg: "no such product found"});
     }
-    return response.status(200).send({msg: "Product successfully deleted!"});
+    return response.status(204).send({msg: "Product successfully deleted!"});
 }
