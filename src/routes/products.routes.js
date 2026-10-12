@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProducts, getProductById, addNewProduct, updateProductById, deleteProductById } from "../controllers/products.controller";
+import { getProducts, getProductById, addNewProduct, updateProductById, deleteProductById, filterByPrice, sortByPrice } from "../controllers/products.controller";
 import { validate } from "../middleware/dataValidation";
 import { productSchema } from "../schemas/prductSchema";
 
@@ -22,5 +22,11 @@ router.put("/products/:id", validate(productSchema),updateProductById);
 
 //deleting a row and returning a success message or 404 if not found
 router.delete("/products/:id", deleteProductById);
+
+//filtering products by price
+router.get("/", filterByPrice);
+
+//sorting products by price
+router.get("/", sortByPrice);
 
 export default router;

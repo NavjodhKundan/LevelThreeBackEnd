@@ -1,3 +1,4 @@
+import { response } from "express";
 import { supabase } from "../config/supabaseClient";
 import {string, z} from "zod";
 
@@ -91,4 +92,43 @@ export const deleteProductById = async (request, response) => {
         return response.status(404).send({msg: "no such product found"});
     }
     return response.status(204).send({msg: "Product successfully deleted!"});
+}
+
+//Day 5
+//5.1
+//function to filter product price by price.
+export const filterByPrice = async(request, response, next) => {
+    try{
+        const {minPrice, maxPrice} = request.query;
+        if(minPrice !== undefined && maxPrice !== undefined){
+            const {data, error} = await supabase.from("products").select().gte("price", minPrice).lte("price", maxPrice);
+        } else if (minPrice !== undefined) {
+            const {data, error} = await supabase.from("products").select().gte("price", minPrice);
+        } else if (maxPrice !== undefined) {
+            const {data, error} = await supabase.from("products").select().lte("price", maxPrice);
+        } else {
+            const {data, error} = await supabase.from("products").select();
+        }
+
+        return response.status(200).send(data);
+    } catch(error) {
+        next(error);
+    }
+}
+
+//function that sortes product list by price in accending or deccending order.
+export const sortByPrice = async(request, response, next) => {
+    try{
+        const {sort} = request.query;
+        if(sort === "acc"){
+            const {data, error} = await supabase.from("products").select().order("price", {accending: true});
+        } else if(sort === "dec"){
+            const {data, error} = await supabase.from("products").select().order("price", {accending: false});
+        } else {
+            const {data, error} = await supabase.from("products").select();
+        }
+        return response.status(200).send(data);
+    } catch(error) {
+        next(error);
+    }
 }
